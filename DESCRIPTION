@@ -3,10 +3,10 @@ Type: Package
 Title: Fast Likelihood Calculation for kappa Phylogenetic Comparative Models
 Version: 0.0.1
 Authors@R: c(person("Fabio", "Machado", email = "macfabio@gmail.com",
-                 role = c("aut", "cre")), 
+                 role = c("aut", "cre", "cph")), 
              person("Venelin", "Mitov", email = "vmitov@gmail.com",
                  comment = '<a href="https://venelin.github.io">venelin.github.io</a>',
-                 role = c("aut", "cre", "cph")))
+                 role = c("aut")))
 Maintainer: Fabio Machado <macfabio@gmail.com>
 Description: Implements likelihood calculation for the BMkappa model in R and Rcpp.
 Encoding: UTF-8
