@@ -1,0 +1,33 @@
+Package: PCMkappa
+Type: Package
+Title: Fast Likelihood Calculation for kappa Phylogenetic Comparative Models
+Version: 0.0.1
+Authors@R: c(person("Fabio", "Machado", email = "macfabio@gmail.com",
+                 role = c("aut", "cre")), 
+             person("Venelin", "Mitov", email = "vmitov@gmail.com",
+                 comment = '<a href="https://venelin.github.io">venelin.github.io</a>',
+                 role = c("aut", "cre", "cph")))
+Maintainer: Fabio Machado <macfabio@gmail.com>
+Description: Implements likelihood calculation for the BMkappa model in R and Rcpp.
+Encoding: UTF-8
+License: GPL (>= 3.0)
+LazyData: true
+Depends:
+    R (>= 3.1.0),
+    methods,
+    PCMBase
+Imports:
+    PCMBase,
+    data.table,
+    abind
+Suggests:
+    PCMBaseCpp,
+    testthat,
+    knitr,
+    rmarkdown,
+    covr
+RoxygenNote: 7.1.1
+ByteCompile: yes
+NeedsCompilation: yes
+Repository: CRAN
+VignetteBuilder: knitr, rmarkdown

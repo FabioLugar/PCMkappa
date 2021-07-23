@@ -1,0 +1,13 @@
+^data-raw$
+^docs$
+^_pkgdown\.yml$
+^codecov\.yml$
+^README\.Rmd$
+^\.travis\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
+^src/RcppTestDebug.txt
+cran-comments
+^pkgdown$
+^doc$
+^Meta$

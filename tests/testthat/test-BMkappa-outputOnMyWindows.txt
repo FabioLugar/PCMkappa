@@ -1,0 +1,195 @@
+> source('C:/PROJECTS/PCMBMkappa/tests/testthat/test-BMkappa.R', echo=TRUE)
+
+> library(abind)
+
+> library(PCMFit)
+
+> library(TreeSim)
+
+> library(PCMBase)
+
+> library(ggplot2)
+
+> library(PCMBaseCpp)
+
+> library(doParallel)
+
+> library(PCMBMkappa)
+
+> # Note: 
+> # To generate the file R/BMkappaDefaultTypes.R, run
+> # > PCMBase::PCMGenerateModelTypes(baseTypes = list(BMkappa = "default"), sourceFil .... [TRUNCATED] 
+
+> N <- 50
+
+> ##########3------
+> G_x <- UpperTriFactor(rbind(c(1.0, 0.7),
++                             c(0.7, 1.0))) 
+
+> BMp_name<-paste0("BMkappa",
++                  "__Global_X0",
++                  "__NonNegative_kappa",
++                  "__UpperTriangularWithDia ..." ... [TRUNCATED] 
+
+> BM_name<-paste0("BM",
++                 "__Global_X0",
++                 "__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Sigma_x",
++          .... [TRUNCATED] 
+
+> modelBM<-PCM(BM_name, k = 2,
++              params = list(Sigma_x = abind(G_x*2,along=3)))
+
+> tree<-PCMTree(ladderize(sim.bd.taxa(N,1,lambda = 1,mu = 0.4)[[1]]))
+
+> mData<-PCMSim(tree, modelBM, X0 = c(0,0))[,1:Ntip(tree)]
+
+> PCMPlotTraitData2D(mData[1:2,], tree,scaleSizeWithTime = T)+coord_fixed()
+
+> param <- double(PCMParamCount(modelBM))
+
+> PCMParamLoadOrStore(modelBM, param, offset=0, load=FALSE)
+[1] 5
+
+> param[3:5]<-c(1,0.5,1)
+
+> PCMParamLoadOrStore(modelBM, param, offset=0, load=TRUE)
+[1] 5
+
+> fitBM<-    PCMFit(model = modelBM, tree = tree,
++                   X = mData,metaI = PCMInfo,
++                   doParallel =T)
+
+> fitBMCpp<- PCMFit(model = modelBM, tree = tree,
++                   X = mData,metaI = PCMInfoCpp,
++                   doParallel =T)
+
+> modelBMp<-PCM(BMp_name, k = 2,
++               params = list(kappa = 0.5,
++                             Sigma_x = abind(G_x,along=3)))
+
+> fitBMp<- PCMFit(model = modelBMp, tree = tree,
++                 X = mData,metaI = PCMInfo, doParallel =T)
+
+> fitBMpCpp<- PCMFit(model = modelBMp, tree = tree,
++                    X = mData,metaI = PCMInfoCpp, doParallel =T)
+
+> data.frame(AIC(fitBM,fitBMCpp,fitBMp,fitBMpCpp),
++            logLik=c(logLik(fitBM)[1], logLik(fitBMCpp)[1], 
++                     logLik(fitBMp)[ .... [TRUNCATED] 
+          df      AIC    logLik
+fitBM      5 533.0799 -261.5400
+fitBMCpp   5 533.0799 -261.5400
+fitBMp     3 531.7182 -262.8591
+fitBMpCpp  3 531.7182 -262.8591
+
+> # some additional checks
+> PCMParamLowerLimit(modelBMp)
+Brownian motion model with G-proportional Sigma
+S3 class: BMkappa__Global_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x, BMkappa, BM, GaussianPCM, PCM, _Transformable; k=2; p=3; regimes: 1. Parameters/sub-models:
+X0 (VectorParameter, _Global, numeric; trait values at the root):
+[1] -10 -10
+kappa (ScalarParameter, _NonNegative, numeric; proportionality parameter):
+1 
+0 
+Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal, _Fixed; Upper triangular factor of the unit-time variance rate):
+, , 1
+
+          [,1] [,2]
+[1,] 0.7141428  0.7
+[2,] 0.0000000  1.0
+
+Sigmae_x (MatrixParameter, _Omitted; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
+
+ 
+
+> PCMLik(X = mData, tree = tree, model = modelBMp)
+[1] -620.2562
+attr(,"X0")
+[1] 0 0
+
+> PCMLik(X = mData, tree = tree, model = modelBMp, metaI = PCMInfoCpp)
+[1] -620.2562
+attr(,"X0")
+[1] 0 0
+
+> modelBM2 <- PCMApplyTransformation(modelBMp)
+
+> PCMLik(X = mData, tree = tree, model = modelBM2)
+[1] -620.2562
+attr(,"X0")
+[1] 0 0
+
+> PCMLik(X = mData, tree = tree, model = modelBM2, metaI = PCMInfoCpp)
+[1] -620.2562
+attr(,"X0")
+[1] 0 0
+
+> RetrieveBestModel(fitBM)
+Brownian motion model
+S3 class: BM__Global_X0__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x, BM, GaussianPCM, PCM; k=2; p=5; regimes: 1. Parameters/sub-models:
+X0 (VectorParameter, _Global, numeric; trait values at the root):
+[1] 1.252500 1.179401
+Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal; factor of the unit-time variance rate):
+, , 1
+
+         [,1]     [,2]
+[1,] 1.362469 1.676341
+[2,] 0.000000 2.032972
+
+Sigmae_x (MatrixParameter, _Omitted; factor of the non-heritable variance or the variance of the measurement error):
+
+ 
+
+> RetrieveBestModel(fitBMCpp)
+Brownian motion model
+S3 class: BM__Global_X0__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x, BM, GaussianPCM, PCM; k=2; p=5; regimes: 1. Parameters/sub-models:
+X0 (VectorParameter, _Global, numeric; trait values at the root):
+[1] 1.254149 1.181001
+Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal; factor of the unit-time variance rate):
+, , 1
+
+         [,1]     [,2]
+[1,] 1.362474 1.676291
+[2,] 0.000000 2.032951
+
+Sigmae_x (MatrixParameter, _Omitted; factor of the non-heritable variance or the variance of the measurement error):
+
+ 
+
+> RetrieveBestModel(fitBMp)
+Brownian motion model with G-proportional Sigma
+S3 class: BMkappa__Global_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x, BMkappa, BM, GaussianPCM, PCM, _Transformable; k=2; p=3; regimes: 1. Parameters/sub-models:
+X0 (VectorParameter, _Global, numeric; trait values at the root):
+[1] 1.252519 1.179398
+kappa (ScalarParameter, _NonNegative, numeric; proportionality parameter):
+       1 
+3.949311 
+Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal, _Fixed; Upper triangular factor of the unit-time variance rate):
+, , 1
+
+          [,1] [,2]
+[1,] 0.7141428  0.7
+[2,] 0.0000000  1.0
+
+Sigmae_x (MatrixParameter, _Omitted; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
+
+ 
+
+> RetrieveBestModel(fitBMpCpp)
+Brownian motion model with G-proportional Sigma
+S3 class: BMkappa__Global_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x, BMkappa, BM, GaussianPCM, PCM, _Transformable; k=2; p=3; regimes: 1. Parameters/sub-models:
+X0 (VectorParameter, _Global, numeric; trait values at the root):
+[1] 1.252517 1.179397
+kappa (ScalarParameter, _NonNegative, numeric; proportionality parameter):
+       1 
+3.949311 
+Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal, _Fixed; Upper triangular factor of the unit-time variance rate):
+, , 1
+
+          [,1] [,2]
+[1,] 0.7141428  0.7
+[2,] 0.0000000  1.0
+
+Sigmae_x (MatrixParameter, _Omitted; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
+
+ 
