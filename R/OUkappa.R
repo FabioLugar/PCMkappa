@@ -1,25 +1,27 @@
 
 #' @export
-PCMParentClasses.BMkappa <- function(model) {
-  c("BM", "GaussianPCM", "PCM", "_Transformable")
+PCMParentClasses.OUkappa <- function(model) {
+  c("OU","GaussianPCM", "PCM", "_Transformable")
 }
 
 #' @export
-PCMDescribe.BMkappa <- function(model, ...) {
-  "Brownian motion model with G-proportional Sigma"
+PCMDescribe.OUKappa <- function(model, ...) {
+  "Ornstein-Uhlenbeck model with a G-proportional Sigma"
 }
 
 #' @export
-PCMDescribeParameters.BMkappa <- function(model, ...) {
+PCMDescribeParameters.OUkappa <- function(model, ...) {
   list(
     X0 = "trait values at the root",
     kappa = "proportionality parameter",
+    H = "adaptation rate matrix",
+    Theta = "long-term optimum",
     Sigma_x = "Upper triangular factor of the unit-time variance rate",
     Sigmae_x = "Upper triangular factor of the non-heritable variance or the variance of the measurement error")
 }
 
 #' @export
-PCMListParameterizations.BMkappa <- function(model, ...) {
+PCMListParameterizations.OUkappa <- function(model, ...) {
     list(
     X0 = list(
       c("VectorParameter", "_Global"),
@@ -31,6 +33,34 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
       c("ScalarParameter", "_NonNegative", "_Global"),
       c("ScalarParameter", "_NonNegative", "_Fixed","_Global"),
       c("ScalarParameter", "_NonNegative", "_Omitted")),
+    
+    H = list(
+      c("MatrixParameter"),
+      c("MatrixParameter", "_Fixed"),
+      c("MatrixParameter", "_Symmetric"),
+      c("MatrixParameter", "_Diagonal"),
+      c("MatrixParameter", "_ScalarDiagonal"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
+      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
+      c("MatrixParameter", "_Schur", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_Diagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Global"),
+      c("MatrixParameter", "_Fixed", "_Global"),
+      c("MatrixParameter", "_Symmetric", "_Global"),
+      c("MatrixParameter", "_Diagonal", "_Global"),
+      c("MatrixParameter", "_ScalarDiagonal", "_Global"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal", "_Global"),
+      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Global"),
+      c("MatrixParameter", "_Schur", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_Diagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global")),
+    Theta = list(
+      c("VectorParameter"),
+      c("VectorParameter", "_Fixed"),
+      c("VectorParameter", "_AllEqual")),
 
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
@@ -52,7 +82,7 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
 }
 
 #' @export
-PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
+PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
   list(
     X0 = list(
       c("VectorParameter", "_Global")
@@ -60,6 +90,25 @@ PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
     kappa = list(
       c("ScalarParameter",  "_NonNegative")),
 
+    H = list(
+      c("MatrixParameter"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
+      c("MatrixParameter", "_Schur", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_Diagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+      c("MatrixParameter", "_Schur", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
+
+      c("MatrixParameter", "_Global"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal", "_Global"),
+      c("MatrixParameter", "_Schur", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_Diagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
+      c("MatrixParameter", "_Schur", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Transformable", "_Global")
+    ),
+    
+    Theta = list(
+      c("VectorParameter")),
+    
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed")
     ),
@@ -70,25 +119,29 @@ PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
 }
 
 #' @export
-PCMSpecify.BMkappa <- function(model, ...) {
+PCMSpecify.OUkappa <- function(model, ...) {
   spec <- list(
     X0 = structure(0.0, class = c('VectorParameter', '_Global'),
                    description = 'trait values at the root'),
     kappa = structure(0.0, class = c('ScalarParameter',  '_NonNegative'),
                         description = 'proportionality constant for Sigma_x'),
+    H = structure(0.0, class = c('MatrixParameter'),
+                  description = 'adaptation rate matrix'),
+    Theta = structure(0.0, class = c('VectorParameter'),
+                      description = 'long-term optimum'),
     Sigma_x = structure(0.0, class = c('MatrixParameter', '_UpperTriangularWithDiagonal', '_WithNonNegativeDiagonal'),
                         description = 'Upper triangular factor of the unit-time variance rate'),
     Sigmae_x = structure(0.0, class = c('MatrixParameter', '_UpperTriangularWithDiagonal', '_WithNonNegativeDiagonal'),
                          description = 'Upper triangular factor of the non-heritable variance or the variance of the measurement error'))
   attributes(spec) <- attributes(model)
-  if(is.null(names(spec))) names(spec) <- c('X0', 'kappa', 'Sigma_x', 'Sigmae_x')
-  if(any(sapply(spec, is.Transformable))) class(spec) <- unique(c(class(spec), '_Transformable'))
+  if(is.null(names(spec))) names(spec) <- c('X0', "kappa", 'H', 'Theta', 'Sigma_x', 'Sigmae_x')
+  if(any(sapply(spec, is.Transformable))) class(spec) <- c(class(spec), '_Transformable')
   spec
 }
 
 #' @importFrom PCMBase PCMNumRegimes PCMNumTraits PCMApplyTransformation is.Transformable is.Global
 #' @export
-PCMApplyTransformation.BMkappa <- function(o, ...) {
+PCMApplyTransformation.OUkappa <- function(o, ...) {
   if(is.Transformable(o)) {
     
     # Transform the parameters (if any of them is _Transformable).
@@ -126,7 +179,7 @@ PCMApplyTransformation.BMkappa <- function(o, ...) {
     o[["kappa"]] <- NULL
     
     classes <- class(o)
-    classes <- classes[!classes %in% c("BMkappa", "_Transformable")]
+    classes <- classes[!classes %in% c("OUkappa", "_Transformable")]
     class(o) <- classes
 
     spec <- attr(o, "spec")
