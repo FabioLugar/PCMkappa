@@ -1,4 +1,3 @@
-
 #' @export
 PCMParentClasses.BMkappa <- function(model) {
   c("BM", "GaussianPCM", "PCM", "_Transformable")
