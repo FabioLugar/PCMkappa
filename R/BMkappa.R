@@ -54,7 +54,8 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
 PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
   list(
     X0 = list(
-      c("VectorParameter", "_Global")
+      c("VectorParameter", "_Global"),
+      c("VectorParameter", "_Omitted")
     ),
     kappa = list(
       c("ScalarParameter",  "_NonNegative")),

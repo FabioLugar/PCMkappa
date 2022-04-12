@@ -85,7 +85,8 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
 PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
   list(
     X0 = list(
-      c("VectorParameter", "_Global")
+      c("VectorParameter", "_Global"),
+      c("VectorParameter", "_Omitted")
     ),
     kappa = list(
       c("ScalarParameter",  "_NonNegative")),
