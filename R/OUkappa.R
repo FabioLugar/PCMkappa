@@ -32,7 +32,7 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
       c("ScalarParameter", "_NonNegative"),
       c("ScalarParameter", "_NonNegative", "_Global"),
       c("ScalarParameter", "_NonNegative", "_Fixed","_Global"),
-      c("ScalarParameter", "_NonNegative", "_Omitted")),
+      c("ScalarParameter", "_Omitted")),
     
     H = list(
       c("MatrixParameter"),
@@ -68,7 +68,8 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
       c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal","_Fixed"),
-      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal","_Fixed")),
+      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Omitted")),
 
     Sigmae_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
@@ -89,7 +90,8 @@ PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
       c("VectorParameter", "_Omitted")
     ),
     kappa = list(
-      c("ScalarParameter",  "_NonNegative")),
+      c("ScalarParameter",  "_NonNegative"),
+      c("ScalarParameter", "_Omitted")),
 
     H = list(
       c("MatrixParameter"),
@@ -111,7 +113,8 @@ PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
       c("VectorParameter")),
     
     Sigma_x = list(
-      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed")
+      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Omitted")
     ),
 
     Sigmae_x = list(
