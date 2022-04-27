@@ -67,6 +67,7 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Fixed"),
+      c("MatrixParameter", "_Fixed", "_Global"),
       c("MatrixParameter", "_Omitted")),
 
     Sigmae_x = list(
@@ -112,6 +113,7 @@ PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
     
     Sigma_x = list(
       c("MatrixParameter", "_Fixed"),
+      c("MatrixParameter", "_Fixed", "_Global"),
       c("MatrixParameter", "_Omitted")
     ),
 
