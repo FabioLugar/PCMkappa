@@ -3,16 +3,16 @@
 
 
 #' @export
-PCMParentClasses.BMkappa__Global_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
+PCMParentClasses.BMkappa__Global_X0__NonNegative_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
 
 #' @export
-PCMSpecify.BMkappa__Global_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
+PCMSpecify.BMkappa__Global_X0__NonNegative_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Global"),
 description = c("trait values at the root")),
 kappa = structure(0.0, class = c("ScalarParameter", "_NonNegative"),
 description = c("proportionality parameter")),
-Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Fixed"),
+Sigma_x = structure(0.0, class = c("MatrixParameter", "_Fixed"),
 description = c("Upper triangular factor of the unit-time variance rate")),
 Sigmae_x = structure(0.0, class = c("MatrixParameter", "_Omitted"),
 description = c("Upper triangular factor of the non-heritable variance or the variance of the measurement error")))
@@ -24,16 +24,16 @@ spec
 
 
 #' @export
-PCMParentClasses.BMkappa__Omitted_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
+PCMParentClasses.BMkappa__Omitted_X0__NonNegative_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
 
 #' @export
-PCMSpecify.BMkappa__Omitted_X0__NonNegative_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
+PCMSpecify.BMkappa__Omitted_X0__NonNegative_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Omitted"),
 description = c("trait values at the root")),
 kappa = structure(0.0, class = c("ScalarParameter", "_NonNegative"),
 description = c("proportionality parameter")),
-Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Fixed"),
+Sigma_x = structure(0.0, class = c("MatrixParameter", "_Fixed"),
 description = c("Upper triangular factor of the unit-time variance rate")),
 Sigmae_x = structure(0.0, class = c("MatrixParameter", "_Omitted"),
 description = c("Upper triangular factor of the non-heritable variance or the variance of the measurement error")))
@@ -45,16 +45,16 @@ spec
 
 
 #' @export
-PCMParentClasses.BMkappa__Global_X0__Omitted_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
+PCMParentClasses.BMkappa__Global_X0__Omitted_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
 
 #' @export
-PCMSpecify.BMkappa__Global_X0__Omitted_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
+PCMSpecify.BMkappa__Global_X0__Omitted_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Global"),
 description = c("trait values at the root")),
 kappa = structure(0.0, class = c("ScalarParameter", "_Omitted"),
 description = c("proportionality parameter")),
-Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Fixed"),
+Sigma_x = structure(0.0, class = c("MatrixParameter", "_Fixed"),
 description = c("Upper triangular factor of the unit-time variance rate")),
 Sigmae_x = structure(0.0, class = c("MatrixParameter", "_Omitted"),
 description = c("Upper triangular factor of the non-heritable variance or the variance of the measurement error")))
@@ -66,16 +66,16 @@ spec
 
 
 #' @export
-PCMParentClasses.BMkappa__Omitted_X0__Omitted_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
+PCMParentClasses.BMkappa__Omitted_X0__Omitted_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model) c("BMkappa", "BM", "GaussianPCM", "PCM", "_Transformable")
 
 #' @export
-PCMSpecify.BMkappa__Omitted_X0__Omitted_kappa__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
+PCMSpecify.BMkappa__Omitted_X0__Omitted_kappa__Fixed_Sigma_x__Omitted_Sigmae_x <- function(model, ...) {
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Omitted"),
 description = c("trait values at the root")),
 kappa = structure(0.0, class = c("ScalarParameter", "_Omitted"),
 description = c("proportionality parameter")),
-Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Fixed"),
+Sigma_x = structure(0.0, class = c("MatrixParameter", "_Fixed"),
 description = c("Upper triangular factor of the unit-time variance rate")),
 Sigmae_x = structure(0.0, class = c("MatrixParameter", "_Omitted"),
 description = c("Upper triangular factor of the non-heritable variance or the variance of the measurement error")))

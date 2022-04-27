@@ -35,9 +35,7 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
-      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
-      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal","_Fixed"),
-      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Fixed"),
       c("MatrixParameter", "_Omitted")),
 
     Sigmae_x = list(
@@ -63,7 +61,7 @@ PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
       c("ScalarParameter", "_Omitted")
     ),
     Sigma_x = list(
-      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Fixed"),
       c("MatrixParameter", "_Omitted")
     ),
 
