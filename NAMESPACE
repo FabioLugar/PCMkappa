@@ -2,6 +2,7 @@
 
 S3method(PCMApplyTransformation,BMkappa)
 S3method(PCMApplyTransformation,OUkappa)
+S3method(PCMApplyTransformation,PCM)
 S3method(PCMDescribe,BMkappa)
 S3method(PCMDescribe,OUKappa)
 S3method(PCMDescribeParameters,BMkappa)

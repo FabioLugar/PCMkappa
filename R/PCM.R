@@ -1,18 +1,29 @@
+#' @export
 PCMApplyTransformation.PCM <- function(o, ...) {
   if(is.Transformable(o)) {
     
-    if(any(class(o) == "MixedGaussian") && any(grepl("kappa", lapply(o,class)))) {
-      if(is.Global(o[["Sigma_x"]])){
+    if(any(class(o) == "MixedGaussian") && 
+       any(grepl("kappa", lapply(o,class))) && 
+       is.Global(o[["Sigma_x"]])) {
         for(i in which(grepl("_Omitted_Sigma_x",lapply(o, class)))){
-          Sigma_x<-o[["Sigma_x"]]
-          class(Sigma_x)<-class(Sigma_x)[class(Sigma_x)!="_Global"]
+          R <- PCMNumRegimes(o[[i]])
+          k <- PCMNumTraits(o[[i]])
+          Sigma_x<-array(o[["Sigma_x"]],c(k,k,R))
+          class(Sigma_x)<-class(o[["Sigma_x"]])[!class(o[["Sigma_x"]]) %in% c("_Global","matrix")]
           o[[i]][["Sigma_x"]] <- Sigma_x
           newClass<-sub("_Omitted_Sigma_x","_Fixed_Sigma_x", class(o[[i]])[1])
           class(o[[i]])[1]<-newClass
-          class(attr(o[[i]], "spec"))[1]<-newClass
+          
+          spec <- attr(o[[i]], "spec")
+          class(spec[["Sigma_x"]])<-sub("_Omitted","_Fixed", class(spec[["Sigma_x"]]))
+          attr(o[[i]], "spec") <-  spec
         }
-      }
+      
       o[["Sigma_x"]] <- NULL
+      
+      spec <- attr(o, "spec")
+      spec[["Sigma_x"]] <- NULL
+      attr(o, "spec") <- spec
     }
     
     
