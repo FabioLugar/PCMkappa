@@ -19,7 +19,7 @@ PCMDescribeParameters.BMkappa <- function(model, ...) {
 
 #' @export
 PCMListParameterizations.BMkappa <- function(model, ...) {
-    list(
+  list(
     X0 = list(
       c("VectorParameter", "_Global"),
       c("VectorParameter", "_Fixed", "_Global"),
@@ -29,16 +29,16 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
       c("ScalarParameter", "_NonNegative"),
       c("ScalarParameter", "_NonNegative", "_Global"),
       c("ScalarParameter", "_NonNegative", "_Fixed","_Global"),
-      c("ScalarParameter", "_Omitted")),
-
+      c("ScalarParameter", "_NonNegative", "_Omitted")),
+    
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
-      c("MatrixParameter", "_Fixed"),
-      c("MatrixParameter", "_Fixed", "_Global"),
-      c("MatrixParameter", "_Omitted")),
-
+      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal","_Fixed")),
+    
     Sigmae_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
@@ -54,19 +54,15 @@ PCMListParameterizations.BMkappa <- function(model, ...) {
 PCMListDefaultParameterizations.BMkappa <- function(model, ...) {
   list(
     X0 = list(
-      c("VectorParameter", "_Global"),
-      c("VectorParameter", "_Omitted")
+      c("VectorParameter", "_Global")
     ),
     kappa = list(
-      c("ScalarParameter",  "_NonNegative"),
-      c("ScalarParameter", "_Omitted")
-    ),
+      c("ScalarParameter",  "_NonNegative")),
+    
     Sigma_x = list(
-      c("MatrixParameter", "_Fixed"),
-      c("MatrixParameter", "_Fixed", "_Global"),
-      c("MatrixParameter", "_Omitted")
+      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed")
     ),
-
+    
     Sigmae_x = list(
       c("MatrixParameter", "_Omitted"))
   )
@@ -78,7 +74,7 @@ PCMSpecify.BMkappa <- function(model, ...) {
     X0 = structure(0.0, class = c('VectorParameter', '_Global'),
                    description = 'trait values at the root'),
     kappa = structure(0.0, class = c('ScalarParameter',  '_NonNegative'),
-                        description = 'proportionality constant for Sigma_x'),
+                      description = 'proportionality constant for Sigma_x'),
     Sigma_x = structure(0.0, class = c('MatrixParameter', '_UpperTriangularWithDiagonal', '_WithNonNegativeDiagonal'),
                         description = 'Upper triangular factor of the unit-time variance rate'),
     Sigmae_x = structure(0.0, class = c('MatrixParameter', '_UpperTriangularWithDiagonal', '_WithNonNegativeDiagonal'),
@@ -131,13 +127,13 @@ PCMApplyTransformation.BMkappa <- function(o, ...) {
     classes <- class(o)
     classes <- classes[!classes %in% c("BMkappa", "_Transformable")]
     class(o) <- classes
-
+    
     spec <- attr(o, "spec")
     spec[["kappa"]] <- NULL
     class(spec) <- classes
     class(spec[["Sigma_x"]]) <- class(o[["Sigma_x"]])
     attr(o, "spec") <- spec
-
+    
     o
   } else {
     o

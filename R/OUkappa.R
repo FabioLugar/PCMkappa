@@ -22,7 +22,7 @@ PCMDescribeParameters.OUkappa <- function(model, ...) {
 
 #' @export
 PCMListParameterizations.OUkappa <- function(model, ...) {
-    list(
+  list(
     X0 = list(
       c("VectorParameter", "_Global"),
       c("VectorParameter", "_Fixed", "_Global"),
@@ -32,7 +32,7 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
       c("ScalarParameter", "_NonNegative"),
       c("ScalarParameter", "_NonNegative", "_Global"),
       c("ScalarParameter", "_NonNegative", "_Fixed","_Global"),
-      c("ScalarParameter", "_Omitted")),
+      c("ScalarParameter", "_NonNegative", "_Omitted")),
     
     H = list(
       c("MatrixParameter"),
@@ -61,15 +61,15 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
       c("VectorParameter"),
       c("VectorParameter", "_Fixed"),
       c("VectorParameter", "_AllEqual")),
-
+    
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
-      c("MatrixParameter", "_Fixed"),
-      c("MatrixParameter", "_Fixed", "_Global"),
-      c("MatrixParameter", "_Omitted")),
-
+      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal","_Fixed"),
+      c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal","_Fixed")),
+    
     Sigmae_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
@@ -85,13 +85,11 @@ PCMListParameterizations.OUkappa <- function(model, ...) {
 PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
   list(
     X0 = list(
-      c("VectorParameter", "_Global"),
-      c("VectorParameter", "_Omitted")
+      c("VectorParameter", "_Global")
     ),
     kappa = list(
-      c("ScalarParameter",  "_NonNegative"),
-      c("ScalarParameter", "_Omitted")),
-
+      c("ScalarParameter",  "_NonNegative")),
+    
     H = list(
       c("MatrixParameter"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
@@ -99,7 +97,7 @@ PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
       c("MatrixParameter", "_Schur", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
       c("MatrixParameter", "_Schur", "_Diagonal", "_WithNonNegativeDiagonal", "_Transformable"),
       c("MatrixParameter", "_Schur", "_ScalarDiagonal", "_WithNonNegativeDiagonal", "_Transformable"),
-
+      
       c("MatrixParameter", "_Global"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal", "_Global"),
       c("MatrixParameter", "_Schur", "_WithNonNegativeDiagonal", "_Transformable", "_Global"),
@@ -112,11 +110,9 @@ PCMListDefaultParameterizations.OUkappa <- function(model, ...) {
       c("VectorParameter")),
     
     Sigma_x = list(
-      c("MatrixParameter", "_Fixed"),
-      c("MatrixParameter", "_Fixed", "_Global"),
-      c("MatrixParameter", "_Omitted")
+      c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal","_Fixed")
     ),
-
+    
     Sigmae_x = list(
       c("MatrixParameter", "_Omitted"))
   )
@@ -128,7 +124,7 @@ PCMSpecify.OUkappa <- function(model, ...) {
     X0 = structure(0.0, class = c('VectorParameter', '_Global'),
                    description = 'trait values at the root'),
     kappa = structure(0.0, class = c('ScalarParameter',  '_NonNegative'),
-                        description = 'proportionality constant for Sigma_x'),
+                      description = 'proportionality constant for Sigma_x'),
     H = structure(0.0, class = c('MatrixParameter'),
                   description = 'adaptation rate matrix'),
     Theta = structure(0.0, class = c('VectorParameter'),
@@ -185,13 +181,13 @@ PCMApplyTransformation.OUkappa <- function(o, ...) {
     classes <- class(o)
     classes <- classes[!classes %in% c("OUkappa", "_Transformable")]
     class(o) <- classes
-
+    
     spec <- attr(o, "spec")
     spec[["kappa"]] <- NULL
     class(spec) <- classes
     class(spec[["Sigma_x"]]) <- class(o[["Sigma_x"]])
     attr(o, "spec") <- spec
-
+    
     o
   } else {
     o
