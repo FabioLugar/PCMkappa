@@ -355,6 +355,9 @@ S3method(PCMSpecify,OUkappa__Global_X0__NonNegative_kappa__Schur_UpperTriangular
 S3method(PCMSpecify,OUkappa__Global_X0__NonNegative_kappa__Schur_WithNonNegativeDiagonal_Transformable_Global_H__Theta__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x)
 S3method(PCMSpecify,OUkappa__Global_X0__NonNegative_kappa__Schur_WithNonNegativeDiagonal_Transformable_H__Theta__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x)
 S3method(PCMSpecify,OUkappa__Global_X0__NonNegative_kappa__Symmetric_WithNonNegativeDiagonal_H__Theta__UpperTriangularWithDiagonal_WithNonNegativeDiagonal_Fixed_Sigma_x__Omitted_Sigmae_x)
+<<<<<<< HEAD
+>>>>>>> parent of 9aefa9d (roxigenizing)
+=======
 >>>>>>> parent of 9aefa9d (roxigenizing)
 import(PCMBase)
 importFrom(PCMBase,PCMApplyTransformation)
