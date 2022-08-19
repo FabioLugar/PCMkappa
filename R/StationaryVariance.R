@@ -5,7 +5,6 @@
 #'
 #' @param H Shur-factor of the adaptive rate matrix.
 #' @param Sigma_x Upper triangular factor of the brownian rate matrix.
-
 #' @export
 StationaryVariance <- function(H,Sigma_x){
   Hs <- structure(H, class = c("MatrixParameter", "_Schur", "_Transformable", "_Global"))
