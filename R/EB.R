@@ -29,7 +29,7 @@ PCMCond.EB <- function(
     rho <- 1
   }
 
-  V <- PCMCondVOU_EB(matrix(0, nrow(Sigma), ncol(Sigma)), Sigma, Sigmae, rho)
+  V <- PCMCondVOU_EB(matrix(0, nrow(Sigma), ncol(Sigma)), Sigma, Sigmae, rho=rho)
   omega <- function(t, edgeIndex, metaI) {
     rep(0, nrow(Sigma))
   }
@@ -116,7 +116,6 @@ PCMSpecify.EB <- function(model, ...) {
 }
 
 
-
 PCMCondVOU_EB <- function(
     H, Sigma, Sigmae = NULL, Sigmaj = NULL, xi = NULL,
     e_Ht = NULL,
@@ -155,7 +154,7 @@ PCMCondVOU_EB <- function(
   
   function(t, edgeIndex, metaI, e_Ht = NULL) {
     P_1SigmaP_t <- PLP_1$P_1 %*% Sigma*exp(-rho*t/2) %*% t(PLP_1$P_1)
-    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t^-r*t/2) %*% t(PLP_1$P)
+    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t^-rho*t/2) %*% t(PLP_1$P)
     if(!is.null(Sigmaj)) {
       if(is.null(e_Ht)) {
         e_Ht <- expm(-t*H)
@@ -168,4 +167,5 @@ PCMCondVOU_EB <- function(
     Re(res)
   }
 }
+
 
