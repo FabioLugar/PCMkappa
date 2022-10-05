@@ -151,10 +151,11 @@ PCMCondVOU_EB <- function(
   
   Lambda_ij <- PCMPairSums(PLP_1$lambda)
   fLambda_ij <- PCMPExpxMeanExp(Lambda_ij, threshold.Lambda_ij)
+  P_1SigmaP_t <- PLP_1$P_1 %*% Sigma %*% t(PLP_1$P_1)
   
   function(t, edgeIndex, metaI, e_Ht = NULL) {
-    P_1SigmaP_t <- PLP_1$P_1 %*% Sigma*exp(-rho*t/2) %*% t(PLP_1$P_1)
-    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t^-rho*t/2) %*% t(PLP_1$P)
+    
+    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t * exp(-rho*t/2)) %*% t(PLP_1$P)
     if(!is.null(Sigmaj)) {
       if(is.null(e_Ht)) {
         e_Ht <- expm(-t*H)
