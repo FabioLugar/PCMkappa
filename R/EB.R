@@ -28,7 +28,7 @@ PCMCond.EB <- function(
   }else{
     rho <- 1
   }
-
+  nHs<-nodeHeights(tree)
   V <- PCMCondVOU_EB(matrix(0, nrow(Sigma), ncol(Sigma)), Sigma, Sigmae, rho=rho)
   omega <- function(t, edgeIndex, metaI) {
     rep(0, nrow(Sigma))
@@ -57,10 +57,10 @@ PCMListParameterizations.EB <- function(model, ...) {
       c("VectorParameter", "_AllEqual", "_Global"),
       c("VectorParameter", "_Omitted")),
     rho = list(
-      c("VectorParameter"),
-      c("VectorParameter", "_Fixed"),
-      c("VectorParameter", "_AllEqual"),
-      c("VectorParameter", "_Omitted")),
+      c("ScalarParameter"),
+      c("ScalarParameter", "_Fixed"),
+      c("ScalarParameter", "_AllEqual"),
+      c("ScalarParameter", "_Omitted")),
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
       c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
@@ -85,7 +85,7 @@ PCMListDefaultParameterizations.EB <- function(model, ...) {
       c("VectorParameter", "_Omitted")
     ),
     rho = list(
-      c("VectorParameter")),
+      c("ScalarParameter")),
     
     Sigma_x = list(
       c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
@@ -103,7 +103,7 @@ PCMSpecify.EB <- function(model, ...) {
   spec <- list(
     X0 = structure(0.0, class = c('VectorParameter', '_Global'),
                    description = 'trait values at the root'),
-    rho = structure(0.0, class = c('VectorParameter'),
+    rho = structure(0.0, class = c('ScalarParameter'),
                         description = 'time-dependent parameter affecting rates of evolution'),
     Sigma_x = structure(0.0, class = c('MatrixParameter', '_UpperTriangularWithDiagonal', '_WithNonNegativeDiagonal'),
                         description = 'Upper triangular factor of the unit-time variance rate'),
@@ -120,7 +120,7 @@ PCMCondVOU_EB <- function(
     H, Sigma, Sigmae = NULL, Sigmaj = NULL, xi = NULL,
     e_Ht = NULL,
     threshold.Lambda_ij = getOption("PCMBase.Threshold.Lambda_ij", 1e-8),
-    rho) {
+    rho=0) {
   
   force(H)
   force(Sigma)
@@ -154,8 +154,7 @@ PCMCondVOU_EB <- function(
   P_1SigmaP_t <- PLP_1$P_1 %*% Sigma %*% t(PLP_1$P_1)
   
   function(t, edgeIndex, metaI, e_Ht = NULL) {
-    
-    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t * exp(-rho*t/2)) %*% t(PLP_1$P)
+    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t) %*% t(PLP_1$P) * exp(-rho*(t+metaI$nodeHeights[edgeIndex,1])/2)
     if(!is.null(Sigmaj)) {
       if(is.null(e_Ht)) {
         e_Ht <- expm(-t*H)
@@ -168,5 +167,3 @@ PCMCondVOU_EB <- function(
     Re(res)
   }
 }
-
-
