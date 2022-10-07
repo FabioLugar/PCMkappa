@@ -130,7 +130,7 @@ PCMInfo.EB <- function(
   res
 }
 
-
+# @export
 PCMCondVOU_EB <- function(
     H, Sigma, Sigmae = NULL, Sigmaj = NULL, xi = NULL,
     e_Ht = NULL,

@@ -12,7 +12,7 @@ set.seed(909)
 #star
 tree<-stree(50)
 tree$edge.length<-rep(50,50)
-tree<-add.random(tree=tree,n=500,edge.length = rep(0,500))
+# tree<-add.random(tree=tree,n=500,edge.length = rep(0,500))
 plot(tree, show.tip.label=FALSE)
 tiplabels(pch=21)
 
@@ -21,8 +21,9 @@ modelEB <- PCM(model = "EB", k = 1)
 modelEB$rho[]<- 1
 modelEB$Sigma_x[]<-1
 
-metaI<-PCMInfo(X = NULL,tree = tree,model = modelEB)
-metaI$nodeHeights<-nodeHeights(tree)
+metaI<-PCMInfo(X = NULL,tree = tree,model = modelEB, nodeHeights=nodeHeights(tree))
+metaI$r
+
 sim<-PCMSim(tree,modelEB,X0 = 0,metaI = metaI)
 sim<-PCMSim(tree,modelEB,X0 = 0)
 
@@ -37,6 +38,12 @@ tree_p <- full_join(tree, d, by = 'node')
 ggtree(tree_p, aes(color=trait),yscale = "trait", 
        continuous = 'colour', size=1)+
   scale_color_viridis_c() + theme_minimal()
+
+simdat<-sim[tree$tip.label] %>% t
+
+tree<-rtree(50)
+
+PCMLik(simdat, tree = tree, modelEB)
 
 # sim<-mvSIM(tree, nsim = 1, model = "EB",
 #       param = list(sigma=1, beta = -1))
