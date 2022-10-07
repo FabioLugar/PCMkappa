@@ -115,6 +115,21 @@ PCMSpecify.EB <- function(model, ...) {
   spec
 }
 
+#' @importFrom phytools nodeHeights
+#' @export
+PCMInfo.EB <- function(
+    X, tree, model,
+    SE = matrix(0.0, PCMNumTraits(model), PCMTreeNumTips(tree)),
+    verbose = FALSE, preorder = NULL, ...) {
+  if(is.Transformable(model)) {
+    model <- PCMApplyTransformation(model)
+  }
+  
+  res <- NextMethod()
+  res$nodeHeights<-nodeHeights(tree)
+  res
+}
+
 
 PCMCondVOU_EB <- function(
     H, Sigma, Sigmae = NULL, Sigmaj = NULL, xi = NULL,
