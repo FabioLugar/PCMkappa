@@ -380,6 +380,7 @@ library(magrittr)
 library(dplyr)
 library(TreeSim)
 library(foreach)
+library(doParallel)
 
 set.seed(909)</code></pre>
 <p>Running on a star phylogeny just to get EB trend.</p>
@@ -419,35 +420,39 @@ summary(unlist(liks))</code></pre>
 ## -16.319 -14.693 -11.248 -12.143 -10.350  -8.615</code></pre>
 <p>Ok… we get some likelihoods, so things are looking up</p>
 <p>Low lets fit one example</p>
-<pre class="r"><code>tree&lt;-trees[[1]]
+<pre class="r"><code>n&lt;-40
+lambda &lt;- 2.0
+mu &lt;- 0.5
+frac &lt;-0.6
+numbsim&lt;-1
+set.seed(99)
+tree&lt;-sim.bd.taxa(n,numbsim,lambda,mu)[[1]]
 sim&lt;-PCMSim(tree,modelEB,X0 = 0)
 X&lt;-t(sim[,tree$tip.label])
+modelEB&lt;-PCM(model = &quot;EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x&quot;, k = 1)
 
+  
 t0&lt;-Sys.time()
-FIT&lt;-PCMFit(X, tree,modelEB)
+FIT&lt;-PCMFit(X, tree,modelEB,doParallel = FALSE)
 t1&lt;-Sys.time()
 t1-t0</code></pre>
-<pre><code>## Time difference of 24.07254 secs</code></pre>
+<pre><code>## Time difference of 1.448313 mins</code></pre>
 <pre class="r"><code>bestFit&lt;-RetrieveBestModel(FIT)
 bestFit</code></pre>
 <pre><code>## Early-Brust model
-## S3 class: EB, GaussianPCM, PCM; k=1; p=4; regimes: 1. Parameters/sub-models:
+## S3 class: EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x, EB, GaussianPCM, PCM; k=1; p=3; regimes: 1. Parameters/sub-models:
 ## X0 (VectorParameter, _Global, numeric; trait values at the root):
-## [1] -0.09531379
-## rho (ScalarParameter, numeric; time-dependent parameter affecting rates of evolution):
-##         1 
-## -1.027106 
-## Sigma_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal; Upper triangular factor of the unit-time variance rate):
+## [1] 0.07482858
+## rho (VectorParameter, matrix; time-dependent parameter affecting rates of evolution):
+##               1
+## [1,] -0.5173853
+## Sigma_x (MatrixParameter, _Diagonal, _WithNonNegativeDiagonal; Upper triangular factor of the unit-time variance rate):
 ## , , 1
 ## 
 ##           [,1]
-## [1,] 0.1974347
+## [1,] 0.4398732
 ## 
-## Sigmae_x (MatrixParameter, _UpperTriangularWithDiagonal, _WithNonNegativeDiagonal; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
-## , , 1
-## 
-##           [,1]
-## [1,] 0.2787588
+## Sigmae_x (MatrixParameter, _Omitted; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
 ## 
 ## </code></pre>
 <pre class="r"><code>knitr::kable(PCMTable(bestFit))</code></pre>
@@ -458,23 +463,71 @@ bestFit</code></pre>
 <th align="left">X0</th>
 <th align="left">rho</th>
 <th align="left">Sigma</th>
-<th align="left">Sigmae</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td align="left">:global:</td>
-<td align="left">-0.09531379</td>
-<td align="left">NULL</td>
+<td align="left">0.07482858</td>
 <td align="left">NULL</td>
 <td align="left">NULL</td>
 </tr>
 <tr class="even">
 <td align="left">1</td>
 <td align="left">NULL</td>
-<td align="left">-1.027106</td>
-<td align="left">0.03898045</td>
-<td align="left">0.07770648</td>
+<td align="left">-0.5173853</td>
+<td align="left">0.1934884</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>registerDoParallel(cores=8)
+mcaffinity(1:8)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>t0&lt;-Sys.time()
+FIT&lt;-PCMFit(X, tree,modelEB,doParallel = TRUE)
+t1&lt;-Sys.time()
+t1-t0</code></pre>
+<pre><code>## Time difference of 24.04287 secs</code></pre>
+<pre class="r"><code>bestFit&lt;-RetrieveBestModel(FIT)
+bestFit</code></pre>
+<pre><code>## Early-Brust model
+## S3 class: EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x, EB, GaussianPCM, PCM; k=1; p=3; regimes: 1. Parameters/sub-models:
+## X0 (VectorParameter, _Global, numeric; trait values at the root):
+## [1] 0.07481763
+## rho (VectorParameter, matrix; time-dependent parameter affecting rates of evolution):
+##               1
+## [1,] -0.5174223
+## Sigma_x (MatrixParameter, _Diagonal, _WithNonNegativeDiagonal; Upper triangular factor of the unit-time variance rate):
+## , , 1
+## 
+##           [,1]
+## [1,] 0.4398649
+## 
+## Sigmae_x (MatrixParameter, _Omitted; Upper triangular factor of the non-heritable variance or the variance of the measurement error):
+## 
+## </code></pre>
+<pre class="r"><code>knitr::kable(PCMTable(bestFit))</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">regime</th>
+<th align="left">X0</th>
+<th align="left">rho</th>
+<th align="left">Sigma</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">:global:</td>
+<td align="left">0.07481763</td>
+<td align="left">NULL</td>
+<td align="left">NULL</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">NULL</td>
+<td align="left">-0.5174223</td>
+<td align="left">0.1934811</td>
 </tr>
 </tbody>
 </table>

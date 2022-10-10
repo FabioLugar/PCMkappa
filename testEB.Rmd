@@ -16,6 +16,7 @@ library(magrittr)
 library(dplyr)
 library(TreeSim)
 library(foreach)
+library(doParallel)
 
 set.seed(909)
 ```
@@ -65,14 +66,37 @@ Ok... we get some likelihoods, so things are looking up
 
 Low lets fit one example
 ```{r, warning=FALSE}
-tree<-trees[[1]]
+n<-40
+lambda <- 2.0
+mu <- 0.5
+frac <-0.6
+numbsim<-1
+set.seed(99)
+tree<-sim.bd.taxa(n,numbsim,lambda,mu)[[1]]
 sim<-PCMSim(tree,modelEB,X0 = 0)
 X<-t(sim[,tree$tip.label])
+modelEB<-PCM(model = "EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x", k = 1)
 
+  
 t0<-Sys.time()
-FIT<-PCMFit(X, tree,modelEB)
+FIT<-PCMFit(X, tree,modelEB,doParallel = FALSE)
 t1<-Sys.time()
 t1-t0
+
+bestFit<-RetrieveBestModel(FIT)
+bestFit
+knitr::kable(PCMTable(bestFit))
+
+registerDoParallel(cores=8)
+mcaffinity(1:8)
+
+t0<-Sys.time()
+FIT<-PCMFit(X, tree,modelEB,doParallel = TRUE)
+t1<-Sys.time()
+t1-t0
+
+
+
 bestFit<-RetrieveBestModel(FIT)
 bestFit
 knitr::kable(PCMTable(bestFit))

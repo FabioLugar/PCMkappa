@@ -127,6 +127,13 @@ PCMInfo.EB <- function(
   
   res <- NextMethod()
   res$nodeHeights<-nodeHeights(tree)
+  if (res$RTree!=1) {
+    for (i in seq_len(res$Rtree)){
+      A<-res$nodeHeights[r==i,]
+      res$nodeHeights[r==i,]<-sweep(A, 1:2, min(A))
+    }
+    res$nodeHeights<-nodeHeights(tree)
+  }
   res
 }
 
@@ -169,7 +176,8 @@ PCMCondVOU_EB <- function(
   P_1SigmaP_t <- PLP_1$P_1 %*% Sigma %*% t(PLP_1$P_1)
   
   function(t, edgeIndex, metaI, e_Ht = NULL) {
-    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t) %*% t(PLP_1$P) * exp(-rho*(t+metaI$nodeHeights[edgeIndex,1])/2)
+    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t) %*% t(PLP_1$P) * 
+      exp(-rho*(t+metaI$nodeHeights[edgeIndex,1])/2)
     if(!is.null(Sigmaj)) {
       if(is.null(e_Ht)) {
         e_Ht <- expm(-t*H)
