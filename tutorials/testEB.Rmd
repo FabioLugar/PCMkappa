@@ -1,0 +1,105 @@
+---
+title: "testing EB"
+author: "Fabio Machado"
+date: "2022-10-07"
+output: html_document
+---
+
+```{r setup, message=FALSE}
+library(PCMBase)
+library(PCMkappa)
+library(PCMFit)
+library(phytools)
+library(ggplot2)
+library(ggtree)
+library(magrittr)
+library(dplyr)
+library(TreeSim)
+library(foreach)
+library(doParallel)
+
+set.seed(909)
+```
+
+Running on a star phylogeny just to get EB trend.
+
+```{r cars}
+tree<-stree(50)
+tree$edge.length<-rep(50,50)
+tree<-add.random(tree=tree,n=500,edge.length = rep(0,500))
+plot(tree, show.tip.label=FALSE)
+tiplabels(pch=21)
+
+modelEB <- PCM(model = "EB", k = 1)
+modelEB$rho[]<- 1
+modelEB$Sigma_x[]<-1
+
+sim<-PCMSim(tree,modelEB,X0 = 0)
+
+sim <- sim[1,]
+d <- data.frame(node = nodeid(tree, names(sim)),
+                trait = sim)
+
+d$node[is.na(d$node)]<-rownames(d)[is.na(d$node)]
+d$node <- as.numeric(d$node)
+tree_p <- full_join(tree, d, by = 'node')
+
+ggtree(tree_p, aes(color=trait),yscale = "trait", 
+       continuous = 'colour', size=1)+
+  scale_color_viridis_c() + theme_minimal()
+
+```
+
+Simulating and getting likelihoods on non-star phylogenies
+
+```{r, warning=FALSE}
+trees<-sim.bd.taxa(10,numbsim = 10,lambda = 1,mu = 0.5)
+liks<- foreach(i=seq_along(trees)) %do% {
+          tree<-trees[[i]]
+          sim<-PCMSim(tree,modelEB,X0 = 0)
+          PCMLik(t(sim[,tree$tip.label]), tree = tree, modelEB)
+        }
+summary(unlist(liks))
+```
+
+Ok... we get some likelihoods, so things are looking up
+
+Low lets fit one example
+```{r, warning=FALSE}
+n<-40
+lambda <- 2.0
+mu <- 0.5
+frac <-0.6
+numbsim<-1
+set.seed(99)
+tree<-sim.bd.taxa(n,numbsim,lambda,mu)[[1]]
+sim<-PCMSim(tree,modelEB,X0 = 0)
+X<-t(sim[,tree$tip.label])
+modelEB<-PCM(model = "EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted_Sigmae_x", k = 1)
+
+  
+t0<-Sys.time()
+FIT<-PCMFit(X, tree,modelEB,doParallel = FALSE)
+t1<-Sys.time()
+t1-t0
+
+bestFit<-RetrieveBestModel(FIT)
+bestFit
+knitr::kable(PCMTable(bestFit))
+
+registerDoParallel(cores=8)
+mcaffinity(1:8)
+
+t0<-Sys.time()
+FIT<-PCMFit(X, tree,modelEB,doParallel = TRUE)
+t1<-Sys.time()
+t1-t0
+
+
+
+bestFit<-RetrieveBestModel(FIT)
+bestFit
+knitr::kable(PCMTable(bestFit))
+```
+
+
