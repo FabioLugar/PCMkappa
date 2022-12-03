@@ -29,7 +29,7 @@ PCMCond.EB <- function(
     rho <- 1
   }
   nHs<-nodeHeights(tree)
-  V <- PCMCondVOU_EB(matrix(0, nrow(Sigma), ncol(Sigma)), Sigma, Sigmae, rho=rho)
+  V <- PCMCondVOU(matrix(0, nrow(Sigma), ncol(Sigma)), Sigma, Sigmae, rho=rho)
   omega <- function(t, edgeIndex, metaI) {
     rep(0, nrow(Sigma))
   }
@@ -135,58 +135,4 @@ PCMInfo.EB <- function(
     res$nodeHeights<-nodeHeights(tree)
   }
   res
-}
-
-# @export
-PCMCondVOU_EB <- function(
-    H, Sigma, Sigmae = NULL, Sigmaj = NULL, xi = NULL,
-    e_Ht = NULL,
-    threshold.Lambda_ij = getOption("PCMBase.Threshold.Lambda_ij", 1e-8),
-    rho=0) {
-  
-  force(H)
-  force(Sigma)
-  force(Sigmae)
-  force(Sigmaj)
-  force(xi)
-  force(e_Ht)
-  
-  if(is.null(dim(H)) | is.null(dim(Sigma))) {
-    stop('ERR:02151:PCMBase:GaussianPCM.R:PCMCondVOU:: H and Sigma must be k x k matrices.')
-  }
-  
-  k <- dim(Sigma)[1]
-  
-  if(!is.matrix(Sigma) | !is.matrix(H) | !isTRUE(all.equal(c(dim(H), dim(Sigma)), rep(k, 4)))) {
-    stop(paste0("ERR:02152:PCMBase:GaussianPCM.R:PCMCondVOU:: H and Sigma must be  ", k, " x ", k, " matrices."))
-  }
-  
-  if(!is.null(Sigmaj) & !is.matrix(Sigmaj) & !isTRUE(all.equal(dim(Sigmaj), rep(k, 2)))) {
-    stop(paste0("ERR:02153:PCMBase:GaussianPCM.R:PCMCondVOU:: Sigmaj must be NULL or a ", k, " x ", k, " matrix."))
-  }
-  
-  if(!is.null(e_Ht) & !is.matrix(e_Ht) & !isTRUE(all.equal(dim(e_Ht), rep(k, 2)))) {
-    stop(paste0("ERR:02154:PCMBase:GaussianPCM.R:PCMCondVOU:: e_Ht must be NULL or a ", k, " x ", k, " matrix."))
-  }
-  
-  PLP_1 <- PCMPLambdaP_1(H)
-  
-  Lambda_ij <- PCMPairSums(PLP_1$lambda)
-  fLambda_ij <- PCMPExpxMeanExp(Lambda_ij, threshold.Lambda_ij)
-  P_1SigmaP_t <- PLP_1$P_1 %*% Sigma %*% t(PLP_1$P_1)
-  
-  function(t, edgeIndex, metaI, e_Ht = NULL) {
-    res <- PLP_1$P %*% (fLambda_ij(t) * P_1SigmaP_t) %*% t(PLP_1$P) * 
-      exp(-rho*(t+metaI$nodeHeights[edgeIndex,1])/2)
-    if(!is.null(Sigmaj)) {
-      if(is.null(e_Ht)) {
-        e_Ht <- expm(-t*H)
-      }
-      res <- res + xi[edgeIndex]*(e_Ht %*% Sigmaj %*% t(e_Ht))
-    }
-    if(!is.null(Sigmae) && metaI$edge[edgeIndex,2] <= metaI$N) {
-      res <- res + Sigmae
-    }
-    Re(res)
-  }
 }

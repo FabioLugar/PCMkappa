@@ -10,7 +10,7 @@ PCMSpecify.EB__Global_X0__rho__UpperTriangularWithDiagonal_WithNonNegativeDiagon
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Global"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
@@ -31,7 +31,7 @@ PCMSpecify.EB__Omitted_X0__rho__UpperTriangularWithDiagonal_WithNonNegativeDiago
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Omitted"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_UpperTriangularWithDiagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
@@ -52,7 +52,7 @@ PCMSpecify.EB__Global_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitted
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Global"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
@@ -73,7 +73,7 @@ PCMSpecify.EB__Omitted_X0__rho__Diagonal_WithNonNegativeDiagonal_Sigma_x__Omitte
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Omitted"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_Diagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
@@ -94,7 +94,7 @@ PCMSpecify.EB__Global_X0__rho__ScalarDiagonal_WithNonNegativeDiagonal_Sigma_x__O
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Global"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
@@ -115,7 +115,7 @@ PCMSpecify.EB__Omitted_X0__rho__ScalarDiagonal_WithNonNegativeDiagonal_Sigma_x__
 spec <- list(
 X0 = structure(0.0, class = c("VectorParameter", "_Omitted"),
 description = c("trait values at the root")),
-rho = structure(0.0, class = c("VectorParameter"),
+rho = structure(0.0, class = c("ScalarParameter"),
 description = c("time-dependent parameter affecting rates of evolution")),
 Sigma_x = structure(0.0, class = c("MatrixParameter", "_ScalarDiagonal", "_WithNonNegativeDiagonal"),
 description = c("Upper triangular factor of the unit-time variance rate")),
